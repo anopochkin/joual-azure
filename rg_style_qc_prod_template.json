@@ -1,0 +1,594 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "accounts_openai_test_joual_name": {
+      "defaultValue": "openai-test-joual",
+      "type": "String"
+    },
+    "networkInterfaces_virt_mashine880_z1_name": {
+      "defaultValue": "virt-mashine880_z1",
+      "type": "String"
+    },
+    "networkSecurityGroups_nsg_test_name": {
+      "defaultValue": "nsg-test",
+      "type": "String"
+    },
+    "publicIPAddresses_virt_mashine_ip_name": {
+      "defaultValue": "virt-mashine-ip",
+      "type": "String"
+    },
+    "schedules_shutdown_computevm_virt_mashine_name": {
+      "defaultValue": "shutdown-computevm-virt-mashine",
+      "type": "String"
+    },
+    "sshPublicKeys_virt_mashine_key_name": {
+      "defaultValue": "virt-mashine_key",
+      "type": "String"
+    },
+    "vaults_keys_joual_name": {
+      "defaultValue": "keys-joual",
+      "type": "String"
+    },
+    "virtualMachines_virt_mashine_name": {
+      "defaultValue": "virt-mashine",
+      "type": "String"
+    },
+    "virtualNetworks_vnet_test_name": {
+      "defaultValue": "vnet-test",
+      "type": "String"
+    }
+  },
+  "resources": [
+    {
+      "apiVersion": "2024-10-01",
+      "kind": "OpenAI",
+      "location": "eastus",
+      "name": "[parameters('accounts_openai_test_joual_name')]",
+      "properties": {
+        "apiProperties": {},
+        "customSubDomainName": "[parameters('accounts_openai_test_joual_name')]",
+        "networkAcls": {
+          "defaultAction": "Allow",
+          "ipRules": [],
+          "virtualNetworkRules": []
+        },
+        "publicNetworkAccess": "Enabled"
+      },
+      "sku": {
+        "name": "S0"
+      },
+      "type": "Microsoft.CognitiveServices/accounts"
+    },
+    {
+      "apiVersion": "2024-07-01",
+      "location": "eastus",
+      "name": "[parameters('sshPublicKeys_virt_mashine_key_name')]",
+      "properties": {
+        "publicKey": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDGQ2FeHORAfWy6DwUpxpmVPfWiQfYe2XMdg+nhNijiVNQk0qJCnwU4iuhMeknz7zxhvPXcYDHg4TOdrx+7jaDeSmP8ia/BYRQlMbbA7McoNP8rYrLFJ6x9xp/gA0s47yeo2gunKr3DPh1bUl/q/q44RaEzTU1I9+OGNC0OYnWwTgftm7ilBbzH4kGFk0/yZl8PanhM/TJ0duTp4zhSCFG6g/DEqdbnh+9lZnHvGSXMKjbbABBINRRiMgVitPQyubEqao4o4gSSl7DLFK51eeMX5GrzQTyL3421XCvQ01ny+3RH2C3mS0swPDTiF2vmoOklnBL3Qoc7E4lCCci/2H+HlFugKxjeVYQ0KbINIbKF93QgjTFPn3ZTrkqV83PNK5XeHanfA+9/ZAut8Sm9OGdKUB5na2AMJ1pLIObRpzpwmUtzGERpI/rWqQOCFrXkJmbPKxXPgdN90+BPZwTptKVAsvtqGKXrCxcBT6753Ap3X4Tf4GL7IF/pF0/5A0NmoK0= generated-by-azure"
+      },
+      "type": "Microsoft.Compute/sshPublicKeys"
+    },
+    {
+      "apiVersion": "2024-12-01-preview",
+      "location": "eastus",
+      "name": "[parameters('vaults_keys_joual_name')]",
+      "properties": {
+        "accessPolicies": [],
+        "enableRbacAuthorization": true,
+        "enableSoftDelete": true,
+        "enabledForDeployment": false,
+        "enabledForDiskEncryption": false,
+        "enabledForTemplateDeployment": false,
+        "networkAcls": {
+          "bypass": "None",
+          "defaultAction": "Allow",
+          "ipRules": [],
+          "virtualNetworkRules": []
+        },
+        "provisioningState": "Succeeded",
+        "publicNetworkAccess": "Enabled",
+        "sku": {
+          "family": "A",
+          "name": "Standard"
+        },
+        "softDeleteRetentionInDays": 7,
+        "tenantId": "922c23fc-bf02-4e9b-bf9c-a32a59f2a10a",
+        "vaultUri": "[concat('https://', parameters('vaults_keys_joual_name'), '.vault.azure.net/')]"
+      },
+      "type": "Microsoft.KeyVault/vaults"
+    },
+    {
+      "apiVersion": "2024-05-01",
+      "location": "eastus",
+      "name": "[parameters('networkSecurityGroups_nsg_test_name')]",
+      "properties": {
+        "securityRules": [
+          {
+            "id": "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_nsg_test_name'), 'Allow_SSH_From_My_IP')]",
+            "name": "Allow_SSH_From_My_IP",
+            "properties": {
+              "access": "Allow",
+              "destinationAddressPrefix": "*",
+              "destinationAddressPrefixes": [],
+              "destinationPortRange": "22",
+              "destinationPortRanges": [],
+              "direction": "Inbound",
+              "priority": 100,
+              "protocol": "TCP",
+              "sourceAddressPrefix": "65.94.235.10",
+              "sourceAddressPrefixes": [],
+              "sourcePortRange": "*",
+              "sourcePortRanges": []
+            },
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules"
+          }
+        ]
+      },
+      "type": "Microsoft.Network/networkSecurityGroups"
+    },
+    {
+      "apiVersion": "2024-05-01",
+      "location": "eastus",
+      "name": "[parameters('publicIPAddresses_virt_mashine_ip_name')]",
+      "properties": {
+        "idleTimeoutInMinutes": 4,
+        "ipAddress": "172.208.54.176",
+        "ipTags": [],
+        "publicIPAddressVersion": "IPv4",
+        "publicIPAllocationMethod": "Static"
+      },
+      "sku": {
+        "name": "Standard",
+        "tier": "Regional"
+      },
+      "type": "Microsoft.Network/publicIPAddresses",
+      "zones": [
+        "1"
+      ]
+    },
+    {
+      "apiVersion": "2024-10-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.CognitiveServices/accounts', parameters('accounts_openai_test_joual_name'))]"
+      ],
+      "name": "[concat(parameters('accounts_openai_test_joual_name'), '/Default')]",
+      "properties": {
+        "state": "Disabled"
+      },
+      "type": "Microsoft.CognitiveServices/accounts/defenderForAISettings"
+    },
+    {
+      "apiVersion": "2024-10-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.CognitiveServices/accounts', parameters('accounts_openai_test_joual_name'))]"
+      ],
+      "name": "[concat(parameters('accounts_openai_test_joual_name'), '/gpt-35-turbo')]",
+      "properties": {
+        "currentCapacity": 2,
+        "model": {
+          "format": "OpenAI",
+          "name": "gpt-35-turbo",
+          "version": "0125"
+        },
+        "raiPolicyName": "Microsoft.DefaultV2",
+        "versionUpgradeOption": "OnceNewDefaultVersionAvailable"
+      },
+      "sku": {
+        "capacity": 2,
+        "name": "Standard"
+      },
+      "type": "Microsoft.CognitiveServices/accounts/deployments"
+    },
+    {
+      "apiVersion": "2024-10-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.CognitiveServices/accounts', parameters('accounts_openai_test_joual_name'))]"
+      ],
+      "name": "[concat(parameters('accounts_openai_test_joual_name'), '/Microsoft.Default')]",
+      "properties": {
+        "contentFilters": [
+          {
+            "blocking": true,
+            "enabled": true,
+            "name": "Hate",
+            "severityThreshold": "Medium",
+            "source": "Prompt"
+          },
+          {
+            "blocking": true,
+            "enabled": true,
+            "name": "Hate",
+            "severityThreshold": "Medium",
+            "source": "Completion"
+          },
+          {
+            "blocking": true,
+            "enabled": true,
+            "name": "Sexual",
+            "severityThreshold": "Medium",
+            "source": "Prompt"
+          },
+          {
+            "blocking": true,
+            "enabled": true,
+            "name": "Sexual",
+            "severityThreshold": "Medium",
+            "source": "Completion"
+          },
+          {
+            "blocking": true,
+            "enabled": true,
+            "name": "Violence",
+            "severityThreshold": "Medium",
+            "source": "Prompt"
+          },
+          {
+            "blocking": true,
+            "enabled": true,
+            "name": "Violence",
+            "severityThreshold": "Medium",
+            "source": "Completion"
+          },
+          {
+            "blocking": true,
+            "enabled": true,
+            "name": "Selfharm",
+            "severityThreshold": "Medium",
+            "source": "Prompt"
+          },
+          {
+            "blocking": true,
+            "enabled": true,
+            "name": "Selfharm",
+            "severityThreshold": "Medium",
+            "source": "Completion"
+          }
+        ],
+        "mode": "Blocking"
+      },
+      "type": "Microsoft.CognitiveServices/accounts/raiPolicies"
+    },
+    {
+      "apiVersion": "2024-10-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.CognitiveServices/accounts', parameters('accounts_openai_test_joual_name'))]"
+      ],
+      "name": "[concat(parameters('accounts_openai_test_joual_name'), '/Microsoft.DefaultV2')]",
+      "properties": {
+        "contentFilters": [
+          {
+            "blocking": true,
+            "enabled": true,
+            "name": "Hate",
+            "severityThreshold": "Medium",
+            "source": "Prompt"
+          },
+          {
+            "blocking": true,
+            "enabled": true,
+            "name": "Hate",
+            "severityThreshold": "Medium",
+            "source": "Completion"
+          },
+          {
+            "blocking": true,
+            "enabled": true,
+            "name": "Sexual",
+            "severityThreshold": "Medium",
+            "source": "Prompt"
+          },
+          {
+            "blocking": true,
+            "enabled": true,
+            "name": "Sexual",
+            "severityThreshold": "Medium",
+            "source": "Completion"
+          },
+          {
+            "blocking": true,
+            "enabled": true,
+            "name": "Violence",
+            "severityThreshold": "Medium",
+            "source": "Prompt"
+          },
+          {
+            "blocking": true,
+            "enabled": true,
+            "name": "Violence",
+            "severityThreshold": "Medium",
+            "source": "Completion"
+          },
+          {
+            "blocking": true,
+            "enabled": true,
+            "name": "Selfharm",
+            "severityThreshold": "Medium",
+            "source": "Prompt"
+          },
+          {
+            "blocking": true,
+            "enabled": true,
+            "name": "Selfharm",
+            "severityThreshold": "Medium",
+            "source": "Completion"
+          },
+          {
+            "blocking": true,
+            "enabled": true,
+            "name": "Jailbreak",
+            "source": "Prompt"
+          },
+          {
+            "blocking": true,
+            "enabled": true,
+            "name": "Protected Material Text",
+            "source": "Completion"
+          },
+          {
+            "blocking": false,
+            "enabled": true,
+            "name": "Protected Material Code",
+            "source": "Completion"
+          }
+        ],
+        "mode": "Blocking"
+      },
+      "type": "Microsoft.CognitiveServices/accounts/raiPolicies"
+    },
+    {
+      "apiVersion": "2024-07-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_virt_mashine880_z1_name'))]"
+      ],
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "location": "eastus",
+      "name": "[parameters('virtualMachines_virt_mashine_name')]",
+      "properties": {
+        "additionalCapabilities": {
+          "hibernationEnabled": false
+        },
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
+            "enabled": true
+          }
+        },
+        "hardwareProfile": {
+          "vmSize": "Standard_B1s"
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_virt_mashine880_z1_name'))]",
+              "properties": {
+                "deleteOption": "Detach"
+              }
+            }
+          ]
+        },
+        "osProfile": {
+          "adminUsername": "azureuser",
+          "allowExtensionOperations": true,
+          "computerName": "[parameters('virtualMachines_virt_mashine_name')]",
+          "linuxConfiguration": {
+            "disablePasswordAuthentication": true,
+            "patchSettings": {
+              "assessmentMode": "ImageDefault",
+              "patchMode": "ImageDefault"
+            },
+            "provisionVMAgent": true,
+            "ssh": {
+              "publicKeys": [
+                {
+                  "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDGQ2FeHORAfWy6DwUpxpmVPfWiQfYe2XMdg+nhNijiVNQk0qJCnwU4iuhMeknz7zxhvPXcYDHg4TOdrx+7jaDeSmP8ia/BYRQlMbbA7McoNP8rYrLFJ6x9xp/gA0s47yeo2gunKr3DPh1bUl/q/q44RaEzTU1I9+OGNC0OYnWwTgftm7ilBbzH4kGFk0/yZl8PanhM/TJ0duTp4zhSCFG6g/DEqdbnh+9lZnHvGSXMKjbbABBINRRiMgVitPQyubEqao4o4gSSl7DLFK51eeMX5GrzQTyL3421XCvQ01ny+3RH2C3mS0swPDTiF2vmoOklnBL3Qoc7E4lCCci/2H+HlFugKxjeVYQ0KbINIbKF93QgjTFPn3ZTrkqV83PNK5XeHanfA+9/ZAut8Sm9OGdKUB5na2AMJ1pLIObRpzpwmUtzGERpI/rWqQOCFrXkJmbPKxXPgdN90+BPZwTptKVAsvtqGKXrCxcBT6753Ap3X4Tf4GL7IF/pF0/5A0NmoK0= generated-by-azure",
+                  "path": "/home/azureuser/.ssh/authorized_keys"
+                }
+              ]
+            }
+          },
+          "requireGuestProvisionSignal": true,
+          "secrets": []
+        },
+        "securityProfile": {
+          "securityType": "TrustedLaunch",
+          "uefiSettings": {
+            "secureBootEnabled": true,
+            "vTpmEnabled": true
+          }
+        },
+        "storageProfile": {
+          "dataDisks": [],
+          "diskControllerType": "SCSI",
+          "imageReference": {
+            "offer": "ubuntu-24_04-lts",
+            "publisher": "canonical",
+            "sku": "server",
+            "version": "latest"
+          },
+          "osDisk": {
+            "caching": "ReadWrite",
+            "createOption": "FromImage",
+            "deleteOption": "Delete",
+            "managedDisk": {
+              "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_virt_mashine_name'), '_OsDisk_1_a56cb0d5c0e94a868a02f8cd66481561'))]"
+            },
+            "name": "[concat(parameters('virtualMachines_virt_mashine_name'), '_OsDisk_1_a56cb0d5c0e94a868a02f8cd66481561')]",
+            "osType": "Linux"
+          }
+        }
+      },
+      "type": "Microsoft.Compute/virtualMachines",
+      "zones": [
+        "1"
+      ]
+    },
+    {
+      "apiVersion": "2018-09-15",
+      "dependsOn": [
+        "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_virt_mashine_name'))]"
+      ],
+      "location": "eastus",
+      "name": "[parameters('schedules_shutdown_computevm_virt_mashine_name')]",
+      "properties": {
+        "dailyRecurrence": {
+          "time": "2300"
+        },
+        "notificationSettings": {
+          "emailRecipient": "anopochkin@outlook.com",
+          "notificationLocale": "ru",
+          "status": "Enabled",
+          "timeInMinutes": 30
+        },
+        "status": "Enabled",
+        "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_virt_mashine_name'))]",
+        "taskType": "ComputeVmShutdownTask",
+        "timeZoneId": "UTC"
+      },
+      "type": "microsoft.devtestlab/schedules"
+    },
+    {
+      "apiVersion": "2024-12-01-preview",
+      "dependsOn": [
+        "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_keys_joual_name'))]"
+      ],
+      "location": "eastus",
+      "name": "[concat(parameters('vaults_keys_joual_name'), '/openaiapikey')]",
+      "properties": {
+        "attributes": {
+          "enabled": true
+        }
+      },
+      "type": "Microsoft.KeyVault/vaults/secrets"
+    },
+    {
+      "apiVersion": "2024-05-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_nsg_test_name'))]"
+      ],
+      "name": "[concat(parameters('networkSecurityGroups_nsg_test_name'), '/Allow_SSH_From_My_IP')]",
+      "properties": {
+        "access": "Allow",
+        "destinationAddressPrefix": "*",
+        "destinationAddressPrefixes": [],
+        "destinationPortRange": "22",
+        "destinationPortRanges": [],
+        "direction": "Inbound",
+        "priority": 100,
+        "protocol": "TCP",
+        "sourceAddressPrefix": "65.94.235.10",
+        "sourceAddressPrefixes": [],
+        "sourcePortRange": "*",
+        "sourcePortRanges": []
+      },
+      "type": "Microsoft.Network/networkSecurityGroups/securityRules"
+    },
+    {
+      "apiVersion": "2024-05-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_nsg_test_name'))]"
+      ],
+      "location": "eastus",
+      "name": "[parameters('virtualNetworks_vnet_test_name')]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "10.0.0.0/16"
+          ]
+        },
+        "enableDdosProtection": false,
+        "encryption": {
+          "enabled": false,
+          "enforcement": "AllowUnencrypted"
+        },
+        "privateEndpointVNetPolicies": "Disabled",
+        "subnets": [
+          {
+            "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_vnet_test_name'), 'default')]",
+            "name": "default",
+            "properties": {
+              "addressPrefixes": [
+                "10.0.0.0/24"
+              ],
+              "delegations": [],
+              "networkSecurityGroup": {
+                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_nsg_test_name'))]"
+              },
+              "privateEndpointNetworkPolicies": "Disabled",
+              "privateLinkServiceNetworkPolicies": "Enabled"
+            },
+            "type": "Microsoft.Network/virtualNetworks/subnets"
+          }
+        ],
+        "virtualNetworkPeerings": []
+      },
+      "type": "Microsoft.Network/virtualNetworks"
+    },
+    {
+      "apiVersion": "2024-05-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_virt_mashine_ip_name'))]",
+        "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_vnet_test_name'), 'default')]"
+      ],
+      "kind": "Regular",
+      "location": "eastus",
+      "name": "[parameters('networkInterfaces_virt_mashine880_z1_name')]",
+      "properties": {
+        "auxiliaryMode": "None",
+        "auxiliarySku": "None",
+        "disableTcpStateTracking": false,
+        "dnsSettings": {
+          "dnsServers": []
+        },
+        "enableAcceleratedNetworking": false,
+        "enableIPForwarding": false,
+        "ipConfigurations": [
+          {
+            "id": "[concat(resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_virt_mashine880_z1_name')), '/ipConfigurations/ipconfig1')]",
+            "name": "ipconfig1",
+            "properties": {
+              "primary": true,
+              "privateIPAddress": "10.0.0.4",
+              "privateIPAddressVersion": "IPv4",
+              "privateIPAllocationMethod": "Dynamic",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_virt_mashine_ip_name'))]",
+                "properties": {
+                  "deleteOption": "Detach"
+                }
+              },
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_vnet_test_name'), 'default')]"
+              }
+            },
+            "type": "Microsoft.Network/networkInterfaces/ipConfigurations"
+          }
+        ],
+        "nicType": "Standard"
+      },
+      "type": "Microsoft.Network/networkInterfaces"
+    },
+    {
+      "apiVersion": "2024-05-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_vnet_test_name'))]",
+        "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_nsg_test_name'))]"
+      ],
+      "name": "[concat(parameters('virtualNetworks_vnet_test_name'), '/default')]",
+      "properties": {
+        "addressPrefixes": [
+          "10.0.0.0/24"
+        ],
+        "delegations": [],
+        "networkSecurityGroup": {
+          "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_nsg_test_name'))]"
+        },
+        "privateEndpointNetworkPolicies": "Disabled",
+        "privateLinkServiceNetworkPolicies": "Enabled"
+      },
+      "type": "Microsoft.Network/virtualNetworks/subnets"
+    }
+  ],
+  "variables": {}
+}
