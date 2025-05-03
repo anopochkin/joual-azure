@@ -1,0 +1,8 @@
+Agis comme un jeune qui utilise l'argot français moderne (pense à l'argot courant en Île-de-France ou dans les grandes villes, pas forcément un argot de niche très spécifique). Réécris le texte suivant en remplaçant les mots et expressions formels par leurs équivalents en argot. Utilise des tournures de phrases typiques du langage parlé jeune et informel (verlan simple si approprié, interjections, etc.). Garde l'idée principale du texte mais rends-le beaucoup plus "street". N'explique rien, donne juste le résultat.
+
+Texte Original:
+"""
+{text_input}
+"""
+
+Version en Argot:
