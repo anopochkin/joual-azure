@@ -435,12 +435,6 @@
         "dailyRecurrence": {
           "time": "2300"
         },
-        "notificationSettings": {
-          "emailRecipient": "anopochkin@outlook.com",
-          "notificationLocale": "ru",
-          "status": "Enabled",
-          "timeInMinutes": 30
-        },
         "status": "Enabled",
         "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_virt_mashine_name'))]",
         "taskType": "ComputeVmShutdownTask",
