@@ -100,6 +100,20 @@ class A,B,C azure;
 
 ---
 
+## Notes sur le Déploiement via Template ARM / ARM Template Deployment Notes
+
+Le template ARM exporté (`rg_style_qc_prod_template.json`) permet de recréer la structure principale de l'infrastructure. Cependant, les étapes manuelles suivantes sont nécessaires **après** le déploiement réussi du template :
+
+*The exported ARM template (`rg_style_qc_prod_template.json`) allows recreating the main infrastructure structure. However, the following manual steps are required **after** a successful template deployment:*
+
+1.  **Ajouter le Secret OpenAI / Add OpenAI Secret:** Dans le Key Vault (`keys-joual`) créé par le template, ajoutez manuellement un secret nommé `openaiapikey` avec la valeur de votre clé API Azure OpenAI valide. / *In the Key Vault (`keys-joual`) created by the template, manually add a secret named `openaiapikey` with the value of your valid Azure OpenAI API key.*
+2.  **Configurer l'Accès Admin au Key Vault / Configure Admin Access to Key Vault:** Configurez une Politique d'Accès (Access Policy) ou une attribution de rôle RBAC (ex: `Key Vault Secrets Officer`) pour **votre propre utilisateur** sur le Key Vault afin de pouvoir gérer les secrets manuellement si nécessaire. / *Configure an Access Policy or an RBAC role assignment (e.g., `Key Vault Secrets Officer`) for **your own user** on the Key Vault to be able to manage secrets manually if needed.*
+3.  **Assigner le Rôle à l'Identité Managée de la VM / Assign Role to VM Managed Identity:** Attribuez le rôle RBAC `Key Vault Secrets User` à l'Identité Managée (System-Assigned) de la nouvelle VM (`vm-qcstyle-transformer`) sur le scope du Key Vault. Ceci est nécessaire pour que le script puisse lire le secret. / *Assign the `Key Vault Secrets User` RBAC role to the new VM's System-Assigned Managed Identity (`vm-qcstyle-transformer`) on the Key Vault's scope. This is necessary for the script to read the secret.*
+4.  **Créer le Déploiement OpenAI / Create OpenAI Deployment:** Dans le service Azure OpenAI (`openai-test-joual`) créé, allez dans Azure AI Studio et créez manuellement un déploiement (deployment) du modèle `gpt-3.5-turbo` avec le nom `gpt35turbo`. Le template tente de le créer, mais une vérification/création manuelle est recommandée. / *In the created Azure OpenAI service (`openai-test-joual`), go to Azure AI Studio and manually create a deployment of the `gpt-3.5-turbo` model named `gpt35turbo`. The template attempts to create it, but manual verification/creation is recommended.*
+5.  **Configurer l'Accès SSH / Configure SSH Access:** Le template déploie une ressource SSH Public Key mais ne gère pas la clé privée. Vous devrez soit fournir une clé publique existante comme paramètre lors du déploiement, soit générer une nouvelle paire de clés et utiliser la nouvelle clé privée pour vous connecter à la VM déployée. / *The template deploys an SSH Public Key resource but doesn't handle the private key. You will need to either provide an existing public key as a parameter during deployment or generate a new key pair and use the new private key to connect to the deployed VM.*
+
+ ---
+
 ## 📬 Contact
 
 Pour toute question ou amélioration, merci de contacter l’administrateur du projet.
