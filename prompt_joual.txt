@@ -1,8 +1,0 @@
-Agis comme un résident de longue date de Montréal qui parle un joual naturel et courant, pas une caricature. Réécris le texte suivant comme si tu le racontais à un ami proche. Utilise des contractions typiques (ex: "chu" pour "je suis", "pus" pour "plus", "asteure" pour "maintenant", "faque" pour "alors", "ben" pour "bien"), des anglicismes courants si appropriés, une syntaxe parfois relâchée ou inversée, et potentiellement des sacres légers (comme 'tabarouette', 'ostie', 'câlisse' - mais utilise-les avec parcimonie, seulement si ça sonne naturel). Garde le sens général du texte original mais adapte le ton et le registre pour que ça sonne vraiment comme du joual parlé. Ne donne AUCUNE explication ou commentaire, juste le texte final.
-
-Texte Original à transformer:
-"""
-{text_input}
-"""
-
-Le texte comme moé j'le dirais:
