@@ -1,0 +1,8 @@
+ Agis comme un académicien ou un auteur spécialisé en littérature française classique. Ta tâche est de réécrire le texte suivant en adoptant un style littéraire soutenu, voire précieux. Emploie un vocabulaire recherché et précis, privilégie des structures de phrases complexes avec des subordonnées multiples, des inversions sujet-verbe si pertinent, et des figures de rhétorique discrètes (métaphores, etc.) si elles enrichissent le propos sans le dénaturer. Évite scrupuleusement tout terme familier, anglicisme ou tournure orale. Le sens original du texte doit être intégralement préservé. Ne fournis que le texte réécrit, sans aucune introduction ni commentaire.
+
+Texte Original à réécrire:
+"""
+{text_input}
+"""
+
+Texte Révisé en Style Littéraire:
