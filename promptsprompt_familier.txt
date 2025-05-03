@@ -1,8 +1,0 @@
-Réécris le texte suivant dans un style français familier et conversationnel standard, comme si tu parlais à un collègue ou un membre de ta famille dans une situation détendue. Utilise un vocabulaire courant, des phrases plutôt simples et directes, des contractions orales courantes (ex: "c'est" pour "ce est", "j'sais pas", "t'es"). Évite le langage trop soutenu ou littéraire, mais aussi l'argot spécifique ou le joual marqué. Le ton doit être naturel et informel, tout en conservant le sens original. Donne uniquement le texte transformé.
-
-Texte Original:
-"""
-{text_input}
-"""
-
-Version en Langage Familier:
