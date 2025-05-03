@@ -63,7 +63,7 @@ class A,B,C azure;
 │   ├── prompt_argot.txt
 │   ├── prompt_familier.txt
 │   └── prompt_litteraire.txt
-├── rg_style_qc_prod_template.json (optionnel)
+├── rg_style_qc_prod_template.json 
 └── README.md
 ```
 
@@ -76,10 +76,10 @@ class A,B,C azure;
 
 | Style       | Résultat transformé |
 |-------------|---------------------|
-| **Joual**   | _(à insérer après test)_ |
-| **Argot**   | _(à insérer après test)_ |
-| **Familier**| _(à insérer après test)_ |
-| **Littéraire** | _(à insérer après test)_ |
+| **Joual**   | _Ce matin, j'suis allé au travail en autobus. Y faisait frette, mais j'ai capoté, j'ai croisé un chum pis on a jasé toute la ride._ |
+| **Argot**   | _Ce matin, j'ai pris le car pour aller au taf. Il caillait grave, mais j'ai chopé un pote et on a kiffé en discutant tout le trajet._ |
+| **Familier**| _Ce matin, j'ai pris le bus pour aller au taf. Il faisait frisquet, mais j'ai retrouvé un pote et on a papoté tout le long du trajet._ |
+| **Littéraire** | _Ce matin, je me suis rendu à mon lieu d'occupation à bord d'un véhicule de transport en commun. Malgré la rigueur du climat, une rencontre fortuite avec un proche m'a offert l'occasion de converser tout au long du périple._ |
 
 ---
 
