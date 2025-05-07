@@ -53,22 +53,6 @@ class A,B,C azure;
 
 ---
 
-## 📁 Arborescence du projet
-
-```
-.
-├── transform_style.py
-├── prompts/
-│   ├── prompt_joual.txt
-│   ├── prompt_argot.txt
-│   ├── prompt_familier.txt
-│   └── prompt_litteraire.txt
-├── rg_style_qc_prod_template.json 
-└── README.md
-```
-
----
-
 ## 📌 Exemple de transformation
 
 **Texte original :**  
